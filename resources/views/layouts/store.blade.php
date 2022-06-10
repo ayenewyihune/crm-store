@@ -36,27 +36,36 @@
                     <!-- Left links -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         @if ($product_categories->isNotEmpty())
-                            @for ($i = 0; $i < 5; $i++)
-                                <li class="nav-item">
-                                    <a class="nav-link"
-                                        href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                            @if (count($product_categories) > 5)
+                                @for ($i = 0; $i < 5; $i++)
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                                    </li>
+                                @endfor
+                                <!-- Dropdown -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                        role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                                        More...
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        @for ($i = 5; $i < count($product_categories); $i++)
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                                            </li>
+                                        @endfor
+                                    </ul>
                                 </li>
-                            @endfor
-                            <!-- Dropdown -->
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                                    data-mdb-toggle="dropdown" aria-expanded="false">
-                                    More...
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    @for ($i = 5; $i < count($product_categories); $i++)
-                                        <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
-                                        </li>
-                                    @endfor
-                                </ul>
-                            </li>
+                            @else
+                                @for ($i = 0; $i < count($product_categories); $i++)
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                                    </li>
+                                @endfor
+                            @endif
                         @endif
                     </ul>
                     <!-- Left links -->
