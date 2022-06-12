@@ -1,6 +1,7 @@
 @extends('layouts.store')
 
 @section('content')
+    @include('inc.messages')
     <div class="pt-3 p-md-5">
         <div class="text-center">
             <h3 class="text-black">Recently Added</h3>

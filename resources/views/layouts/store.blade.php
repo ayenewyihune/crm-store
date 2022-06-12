@@ -83,8 +83,14 @@
                         </ul>
                     @else
                         <!-- Icon -->
-                        <a class="text-reset me-3" href="#">
-                            <i class="fas fa-shopping-cart"></i>
+                        <a class="" href="#">
+
+                        </a>
+                        <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ Auth::user()->carts()->where('client_id', $user->id)->count() }}
+                            </span>
                         </a>
                         <!-- Avatar -->
                         <div class="dropdown">
@@ -93,10 +99,10 @@
                                 aria-expanded="false">
                                 @if ($user->image)
                                     <img src="{{ asset('storage/user/image/' . $user->image) }}" class="rounded-circle"
-                                        height="25" alt="img" loading="lazy" />
+                                        height="27" alt="img" loading="lazy" />
                                 @else
                                     <img src="{{ asset('storage/user/image/default.jpg') }}" class="rounded-circle"
-                                        height="25" alt="img" loading="lazy" />
+                                        height="27" alt="img" loading="lazy" />
                                 @endif
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
@@ -138,6 +144,9 @@
         <!-- Copyright -->
     </footer>
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- MDB -->
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     <!-- Additional scripts -->

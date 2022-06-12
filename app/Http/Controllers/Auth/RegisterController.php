@@ -75,6 +75,8 @@ class RegisterController extends Controller
             'user_id' => $user->id
         ]);
 
+        $user->roles()->attach(2);
+
         return $user;
     }
 }
