@@ -1,9 +1,6 @@
 @extends('layouts.admin')
 
 @section('content')
-    <a href="{{ route('admin.stores.deactivated.index') }}" style="text-decoration-line: underline">
-        <h6>Deactivated stores</h6>
-    </a>
     <div class="card-body table-responsive px-0">
         <table class="table table-hover">
             <thead>
@@ -25,31 +22,28 @@
                         <td>{{ $store->user->product_categories->count() }}</td>
                         <td>{{ $store->user->products->count() }}</td>
                         <td>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#modal-deactivate-{{ $store->id }}">DEACTIVATE</button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modal-restore-{{ $store->id }}">RESTORE</button>
                         </td>
                     </tr>
 
-                    <!-- Modal -->
-                    <div class="modal fade modal-danger" id="modal-deactivate-{{ $store->id }}" tabindex="-1"
-                        aria-labelledby="modalDeactivate" aria-hidden="true">
+                    <!-- Modal restore -->
+                    <div class="modal fade modal-primary" id="modal-restore-{{ $store->id }}" tabindex="-1"
+                        aria-labelledby="modalRestore" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="labelDeactivate">Deactivate</h5>
+                                    <h5 class="modal-title" id="labelRestore">Restore</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>Are you sure you want to deactivate this store?</p>
+                                    <p>Are you sure you want to restore this store?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <form action="{{ route('admin.stores.destroy', $store->id) }}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-danger btn-icon">Deactivate</button>
-                                    </form>
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <a class="btn btn-primary"
+                                        href="{{ route('admin.stores.restore', $store->id) }}">Restore</a>
                                 </div>
                             </div>
                         </div>

@@ -8,7 +8,6 @@ use App\Models\Store;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Cart;
-use App\Models\CustomerDetail;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
@@ -119,6 +118,18 @@ class StoresController extends Controller
         ]);
     }
 
+    public function show_product_with_category($client_id, $product_id, $category_id)
+    {
+        $user = User::findOrFail($client_id);
+        $product_categories = $user->product_categories;
+        $product = Product::findOrFail($product_id);
+        return view('public.store.show_product')->with([
+            'user' => $user,
+            'product_categories' => $product_categories,
+            'product' => $product,
+        ]);
+    }
+
     public function add_to_cart(Request $request, $client_id, $product_id)
     {
         $products = Auth::user()->carts()->pluck('product_id');
@@ -201,7 +212,7 @@ class StoresController extends Controller
             }
         }
 
-        $validated_customer = $request->validate([
+        $validated_order = $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'company' => 'nullable|string',
@@ -215,21 +226,15 @@ class StoresController extends Controller
             'remark' => 'nullable',
         ]);
 
-        $customer_detail = new CustomerDetail($validated_customer);
-        $customer_detail->user_id = Auth::id();
-        $customer_detail->client_id = $client_id;
-        $customer_detail->save();
+        $order = new Order($validated_order);
+        $order->user_id = Auth::id();
+        $order->client_id = $client_id;
+        $order->order_status_id = 1;
+
+        $order->save();
 
         foreach ($carts as $cart) {
-            $order = new Order();
-            $order->user_id = Auth::id();
-            $order->client_id = $client_id;
-            $order->order_status_id = 1;
-            $order->customer_detail_id = $customer_detail->id;
-            $order->quantity = $cart->quantity;
-            $order->save();
-            $order->products()->attach($cart->product_id);
-
+            $order->products()->attach($cart->product_id, ['quantity' => $cart->quantity]);
             Product::find($cart->product_id)->decrement('quantity', $cart->quantity);
         }
 
@@ -240,7 +245,26 @@ class StoresController extends Controller
 
     public function admin_index()
     {
-        $stores = Store::paginate(2);
+        $stores = Store::paginate(10);
         return view('stores.index')->with('stores',$stores);
+    }
+
+    public function admin_deactivated_index()
+    {
+        $stores = Store::onlyTrashed()->paginate(10);
+        return view('stores.deactivated_index')->with('stores',$stores);
+    }
+
+    public function admin_destroy($id)
+    {
+        $store = Store::findOrFail($id);
+        $store->delete();
+        return redirect(route('admin.stores.index'))->with('success', 'Store deactivated successfully.');
+    }
+
+    public function admin_restore($id)
+    {
+        Store::withTrashed()->where('id', $id)->first()->restore();
+        return redirect(route('admin.stores.index'))->with('success', 'Store restored successfully.');
     }
 }

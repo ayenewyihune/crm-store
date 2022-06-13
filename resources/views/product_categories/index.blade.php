@@ -53,6 +53,7 @@
                     <th>#</th>
                     <th>Category name</th>
                     <th>Total products</th>
+                    <th>Status</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -66,15 +67,28 @@
                         </th>
                         <td>{{ $product_category->name }}</td>
                         <td>{{ $product_category->products->count() }}</td>
-                        <td><button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#modal-edit-{{ $product_category->id }}">Edit</button></td>
                         <td>
-                            <form action="{{ route('product-categories.hide', $product_category->id) }}" method="POST">
+                            @if ($product_category->trashed())
+                                Hidden
+                            @else
+                                Visible
+                            @endif
+                        </td>
+                        <td>
+                            <form action="{{ route('product-categories.toggle', $product_category->id) }}" method="POST">
                                 @csrf
                                 @method('put')
-                                <button type="submit" class="btn btn-primary btn-icon">Hide</button>
+                                <button type="submit" class="btn btn-primary btn-icon">
+                                    @if ($product_category->trashed())
+                                        Show
+                                    @else
+                                        Hide
+                                    @endif
+                                </button>
                             </form>
                         </td>
+                        <td><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#modal-edit-{{ $product_category->id }}">Edit</button></td>
                         <td><button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                 data-bs-target="#modal-delete-{{ $product_category->id }}">Delete</button></td>
                     </tr>

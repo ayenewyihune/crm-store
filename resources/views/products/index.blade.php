@@ -6,7 +6,7 @@
             <h4>Products</h4>
         </div>
         <div class="col-6 text-right">
-            <a class="btn btn-primary" href="{{ route('products.create') }}">Create</a>
+            <a class="btn btn-primary" href="{{ route('products.create') }}">Create product</a>
         </div>
     </div>
     <hr>

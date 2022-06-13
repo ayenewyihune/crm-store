@@ -11,7 +11,7 @@
 
                             <h1>Login</h1>
                             <p class="text-medium-emphasis">Sign In to your account</p>
-                            <div class="input-group mb-3"><span class="input-group-text">
+                            <div class="input-group my-4"><span class="input-group-text">
                                     <i class="fa-thin fa-at"></i></span>
                                 <input id="email" type="email"
                                     class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
@@ -25,7 +25,7 @@
                             </div>
 
 
-                            <div class="input-group mb-4"><span class="input-group-text">
+                            <div class="input-group my-4"><span class="input-group-text">
                                     <i class="fa-solid fa-key"></i></span>
                                 <input id="password" type="password" placeholder="Password"
                                     class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"

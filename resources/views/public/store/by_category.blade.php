@@ -14,7 +14,7 @@
     <div class="row">
         @foreach ($products as $product)
             <div class="col-md-3 p-1">
-                <a href="{{ route('store.products.show', [$user->id, $product->id]) }}"
+                <a href="{{ route('store.products.show_with_category', [$user->id, $product->id, $product_category->id]) }}"
                     style="text-decoration: none; color:black;">
                     <div class="card">
                         <img height="250px" width="100%" src="{{ asset('storage/product/image/' . $product->image) }}"

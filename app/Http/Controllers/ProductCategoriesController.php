@@ -15,7 +15,7 @@ class ProductCategoriesController extends Controller
      */
     public function index()
     {
-        $product_categories = Auth::user()->product_categories()->paginate(10);
+        $product_categories = Auth::user()->product_categories()->withTrashed()->paginate(10);
         return view('product_categories.index')->with('product_categories',$product_categories);
     }
 
@@ -33,7 +33,6 @@ class ProductCategoriesController extends Controller
 
         $category = new ProductCategory($validated);
         $category->user_id = Auth::id();
-        $category->store_id = Auth::id();
         $category->save();
 
         return redirect('/product-categories');
@@ -51,7 +50,7 @@ class ProductCategoriesController extends Controller
         $validated = $request->validate([
             'name' => 'required|string',
         ]);
-        $category = ProductCategory::find($id);
+        $category = ProductCategory::withTrashed()->where('id', $id)->first();
         $category->update($validated);
         return redirect('/product-categories');
     }
@@ -64,8 +63,19 @@ class ProductCategoriesController extends Controller
      */
     public function destroy($id)
     {
-        $category = ProductCategory::find($id);
-        $category->delete();
+        $category = ProductCategory::withTrashed($id);
+        $category->forceDelete();
+        return redirect('/product-categories');
+    }
+
+    public function toggle_hide(Request $request, $id)
+    {
+        $category = ProductCategory::withTrashed()->where('id', $id)->first();
+        if ($category->trashed()) {
+            $category->restore();
+        } else {
+            $category->delete();
+        }
         return redirect('/product-categories');
     }
 }

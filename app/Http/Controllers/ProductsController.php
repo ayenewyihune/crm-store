@@ -17,7 +17,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10);
+        $products = Auth::user()->products()->paginate(10);
         return view('products.index')->with('products',$products);
     }
 
@@ -51,7 +51,6 @@ class ProductsController extends Controller
 
         $product = new Product($validated);
         $product->user_id = Auth::id();
-        $product->store_id = Auth::user()->store->id;
 
         // Store image to storage
         $extention = $request->file('image')->getClientOriginalExtension();

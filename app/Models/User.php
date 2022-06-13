@@ -47,6 +47,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function is_admin() {
+        return $this->roles()->where('role_id', 1)->exists();
+     }
+
     public function store()
     {
         return $this->hasOne(Store::class);
@@ -65,5 +69,15 @@ class User extends Authenticatable
     public function carts()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function orders_to()
+    {
+        return $this->hasMany(Order::class, 'client_id');
     }
 }

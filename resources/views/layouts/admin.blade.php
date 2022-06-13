@@ -60,10 +60,8 @@
                         @endif
                     </a>
                     <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-start">
-                        @if (Auth::user()->is_admin())
-                            <li><a class="dropdown-item" href="{{ route('admin.users.index') }}">Switch to admin</a>
-                            </li>
-                        @endif
+                        <li><a class="dropdown-item" href="{{ route('dashboard') }}">Switch to client</a>
+                        </li>
                         <li><a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 Logout
@@ -106,46 +104,16 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="{{ route('dashboard') }}" class="nav-link">
-                                <i class="nav-icon fa-solid fa-gauge"></i>
-                                <p>Dashboard</p>
+                            <a href="{{ route('admin.users.index') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-users"></i>
+                                <p>Users</p>
                             </a>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-brands fa-product-hunt"></i>
-                                <p>Products<i class="right fa fa-angle-left"></i></p>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.stores.index') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-shop"></i>
+                                <p>Stores</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('product-categories.index') }}" class="nav-link">
-                                        <p>Product Categories</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('products.index') }}" class="nav-link">
-                                        <p>Products</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-cart-shopping"></i>
-                                <p>Orders<i class="right fa fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('orders.index') }}" class="nav-link">
-                                        <p>Orders to you</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('orders.my_orders') }}" class="nav-link">
-                                        <p>Your orders</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>

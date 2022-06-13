@@ -22,5 +22,9 @@ class OrderStatusSeeder extends Seeder
         $status = new OrderStatus();
         $status->name = 'completed';
         $status->save();
+
+        $status = new OrderStatus();
+        $status->name = 'canceled';
+        $status->save();
     }
 }
