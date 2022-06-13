@@ -1,7 +1,7 @@
 @extends('layouts.store')
 
 @section('content')
-    <div class="py-5 p-md-5">
+    <div class="pt-5 p-md-5">
         <div class="text-center">
             <h1 class="text-black">Checkout</h1>
         </div>
@@ -16,9 +16,9 @@
                         <h4 class="mt-5">Billing details</h4>
                         <hr class="mb-4">
 
-                        <div class="row mb-4">
+                        <div class="row">
                             <div class="col-md-6">
-                                <div class="form-outline">
+                                <div class="form-outline mb-4">
                                     <input type="text" id="first_name" name="first_name"
                                         class="form-control{{ $errors->has('first_name') ? ' is-invalid' : '' }}"
                                         required />
@@ -32,7 +32,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-outline">
+                                <div class="form-outline mb-4">
                                     <input type="text" id="last_name" name="last_name"
                                         class="form-control{{ $errors->has('last_name') ? ' is-invalid' : '' }}"
                                         required />

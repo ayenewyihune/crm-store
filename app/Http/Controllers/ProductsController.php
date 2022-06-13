@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
@@ -52,6 +53,7 @@ class ProductsController extends Controller
 
         $product = new Product($validated);
         $product->user_id = Auth::id();
+        $product->slug = Str::slug($request->input('name'), '-').'-'.Auth::id();
 
         // Store image to storage
         $extention = $request->file('image')->getClientOriginalExtension();
@@ -106,6 +108,7 @@ class ProductsController extends Controller
         $product = Product::find($id);
         Gate::authorize('update', $product);
         $product->fill($validated);
+        $product->slug = Str::slug($request->input('name'), '-').'-'.Auth::id();
 
         // Delete previous image and store new image to storage
         if ($request->hasFile('image')) {

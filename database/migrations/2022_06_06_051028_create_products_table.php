@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->string('slug')->unique();
             $table->float('price',10,3);
             $table->unsignedInteger('quantity');
             $table->string('image');

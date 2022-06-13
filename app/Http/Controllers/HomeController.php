@@ -25,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // User::with('roles')->get()->groupBy('roles.*.name');
         return view('dashboard');
     }
 }

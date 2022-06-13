@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class ProductCategoriesController extends Controller
 {
@@ -34,8 +35,8 @@ class ProductCategoriesController extends Controller
 
         $category = new ProductCategory($validated);
         $category->user_id = Auth::id();
+        $category->slug = Str::slug($request->input('name'), '-').'-'.Auth::id();
         $category->save();
-
         return redirect('/product-categories');
     }
 
@@ -53,7 +54,9 @@ class ProductCategoriesController extends Controller
         ]);
         $category = ProductCategory::withTrashed()->where('id', $id)->first();
         Gate::authorize('update', $category);
-        $category->update($validated);
+        $category->fill($validated);
+        $category->slug = Str::slug($request->input('name'), '-').'-'.Auth::id();
+        $category->update();
         return redirect('/product-categories');
     }
 
@@ -65,7 +68,7 @@ class ProductCategoriesController extends Controller
      */
     public function destroy($id)
     {
-        $category = ProductCategory::withTrashed($id);
+        $category = ProductCategory::withTrashed()->where('id',$id)->first();
         Gate::authorize('forceDelete', $category);
         $category->forceDelete();
         return redirect('/product-categories');
