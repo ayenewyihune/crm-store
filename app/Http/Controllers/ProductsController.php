@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Gate;
 
 class ProductsController extends Controller
 {
@@ -78,6 +79,7 @@ class ProductsController extends Controller
     {
         $product_categories = Auth::user()->product_categories;
         $product = Product::find($id);
+        Gate::authorize('update', $product);
         return view('products.edit')->with([
             'product_categories' => $product_categories,
             'product' => $product,
@@ -102,6 +104,7 @@ class ProductsController extends Controller
         $request->validate(['category_id.*' => 'nullable|integer']);
 
         $product = Product::find($id);
+        Gate::authorize('update', $product);
         $product->fill($validated);
 
         // Delete previous image and store new image to storage
@@ -134,6 +137,7 @@ class ProductsController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
+        Gate::authorize('delete', $product);
         Storage::delete('public/product/image/' . $product->image);
         $product->delete();
         return redirect('/products')->with('success', 'Product deleted');

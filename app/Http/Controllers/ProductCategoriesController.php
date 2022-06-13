@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ProductCategoriesController extends Controller
 {
@@ -51,6 +52,7 @@ class ProductCategoriesController extends Controller
             'name' => 'required|string',
         ]);
         $category = ProductCategory::withTrashed()->where('id', $id)->first();
+        Gate::authorize('update', $category);
         $category->update($validated);
         return redirect('/product-categories');
     }
@@ -64,13 +66,16 @@ class ProductCategoriesController extends Controller
     public function destroy($id)
     {
         $category = ProductCategory::withTrashed($id);
+        Gate::authorize('forceDelete', $category);
         $category->forceDelete();
         return redirect('/product-categories');
     }
 
+    // Hide/show categories as per the need of the client
     public function toggle_hide(Request $request, $id)
     {
         $category = ProductCategory::withTrashed()->where('id', $id)->first();
+        Gate::authorize('delete', $category);
         if ($category->trashed()) {
             $category->restore();
         } else {
