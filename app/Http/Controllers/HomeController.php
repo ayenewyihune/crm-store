@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\Order;
 
 class HomeController extends Controller
 {
@@ -25,7 +25,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // User::with('roles')->get()->groupBy('roles.*.name');
-        return view('dashboard');
+        $orders = Order::where('client_id', Auth::id())->get(['created_at']);
+        $order_trend = [];
+        foreach ($orders as $i => $order) {
+            $date[$i] = date("m/d/Y G:i:s",strtotime($order->created_at));
+            $order_trend[$i] = ['x'=>$date[$i], 'y'=>$i+1];
+        }
+        return view('dashboard')->with([
+            'order_trend' => $order_trend,
+        ]);
     }
 }

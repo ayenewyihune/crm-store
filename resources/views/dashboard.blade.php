@@ -7,25 +7,11 @@
         </div>
     @else
         <section class="container py-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card p-3 table-responsive">
-                        <h5 class="p-4">Other things completed. Dashboard left unfinished due to time shortage.
-                        </h5>
-                        <hr>
-                        <div class="card-body">
-                            <canvas id="product-category" width="400" height="200"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card p-3 table-responsive">
-                        <h5 class="p-4">Order chart</h5>
-                        <hr>
-                        <div class="card-body">
-                            <canvas id="order-chart" width="400" height="200"></canvas>
-                        </div>
-                    </div>
+            <div class="card p-3 table-responsive">
+                <h4 class="card-title mt-2 mb-0 ml-2">Sample chart (Order trend line)</h4>
+                <hr>
+                <div class="card-body my-5">
+                    <canvas id="order-trend"></canvas>
                 </div>
             </div>
         </section>
@@ -34,33 +20,38 @@
 
 @section('script')
     <script>
-        var product_cat_label = [];
-        var product_cat = [];
-        for (let i in products) {
-            for (let j in category_names) {
-                if (products[i]['product_category_id'] == category_names[j]['id']) {
-                    prodcut_cat_label.push(category_names[j]['name']);
-                }
-            }
-            product_cat.push(product[i]['total']);
-        }
+        const order_trend = {!! json_encode($order_trend, JSON_HEX_TAG) !!};
 
-        var productContext = document.getElementById('product-category').getContext('2d');
-        var productChart = new Chart(productContext, {
-            type: 'doughnut',
+        var orderTrendContext;
+        var orderTrendChart;
+
+        orderTrendContext = document.getElementById('order-trend').getContext('2d');
+        orderTrendChart = new Chart(orderTrendContext, {
+            type: 'line',
             data: {
-                labels: label,
                 datasets: [{
-                    label: 'Product by category',
-                    data: data,
-                    backgroundColor: [
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)',
-                        'rgb(54, 205, 86)',
-                        'rgb(255, 99, 132)'
-                    ],
-                    hoverOffset: 4
+                    data: order_trend,
+                    label: "Orders",
+                    backgroundColor: '#1e90ff',
+                    borderColor: '#1e90ff',
+                    fill: false
                 }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Orders'
+                        }
+                    },
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    }
+                }
             }
         });
     </script>

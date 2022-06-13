@@ -190,6 +190,11 @@
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <!-- Bootstrap select -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@0.1.1"></script>
+    @yield('script')
 </body>
 
 </html>

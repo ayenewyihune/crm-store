@@ -35,7 +35,14 @@
                         <a href="{{ route('register') }}" class="btn btn-link px-3 me-2">Register </a>
                     @else
                         <a href="{{ route('dashboard') }}" class="btn btn-link px-3 me-2">Dashboard</a>
-                        <a href="{{ route('store.index', Auth::id()) }}" class="btn btn-link px-3 me-2">Your store</a>
+
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     @endguest
                 </div>
             </div>
