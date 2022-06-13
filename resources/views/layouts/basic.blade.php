@@ -36,7 +36,7 @@
                     @else
                         <a href="{{ route('dashboard') }}" class="btn btn-link px-3 me-2">Dashboard</a>
 
-                        <a class="dropdown-item" href="{{ route('logout') }}"
+                        <a class="btn btn-link px-3 me-2" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             Logout
                         </a>
