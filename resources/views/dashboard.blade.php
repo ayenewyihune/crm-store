@@ -10,7 +10,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card p-3 table-responsive">
-                        <h3 class="p-4">Time shortage :)</h3>
+                        <h5 class="p-4">Other things completed. Dashboard left unfinished due to time shortage.
+                        </h5>
                         <hr>
                         <div class="card-body">
                             <canvas id="product-category" width="400" height="200"></canvas>
@@ -19,7 +20,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card p-3 table-responsive">
-                        <h3 class="p-4">Order chart</h3>
+                        <h5 class="p-4">Order chart</h5>
                         <hr>
                         <div class="card-body">
                             <canvas id="order-chart" width="400" height="200"></canvas>
