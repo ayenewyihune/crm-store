@@ -16,8 +16,7 @@
                                     <i class="fa-solid fa-user"></i>
                                 </span>
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                    name="name" value="{{ old('name') }}" required autocomplete="name"
-                                    placeholder="First name">
+                                    name="name" value="{{ old('name') }}" required autocomplete="name" placeholder="Name">
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
