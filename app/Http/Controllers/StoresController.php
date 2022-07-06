@@ -123,7 +123,7 @@ class StoresController extends Controller
             $cart->quantity = $quantity;
             $cart->update();
         }
-        return redirect(route('store.cart',[$client_id]))->with('success', 'Update successful.');;
+        return redirect(route('store.cart', $client_id))->with('success', 'Update successful.');
     }
 
     // Show checkout page
@@ -132,6 +132,9 @@ class StoresController extends Controller
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
         $carts = Auth::user()->carts()->where('client_id', $client_id)->get();
+        if ($carts->isEmpty()) {
+            return redirect(route('store.cart', $client_id))->with('error', 'You cannot proceed to checkout while the cart is empty.');
+        }
         $total_before_tax = 0;
         foreach ($carts as $cart) {
             $total_before_tax += $cart->quantity * $cart->product->price;
