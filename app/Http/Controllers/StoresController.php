@@ -72,7 +72,7 @@ class StoresController extends Controller
     {
         $products = Auth::user()->carts()->pluck('product_id');
         if (in_array($product_id, $products->toArray())) {
-            return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('error', 'This product is already in your cart, you can add the quantity there if you need more.');
+            return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add-error', 'This product is already in your cart, you can add the quantity there if you need more.');
         }
         $validated = $request->validate(['quantity' => 'required|integer']);
 
@@ -84,7 +84,7 @@ class StoresController extends Controller
         $cart->client_id = $client_id;
         $cart->save();
 
-        return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('success', $product->name.' added to cart successfully.');
+        return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
     }
 
     // Show cart
