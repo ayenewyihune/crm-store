@@ -32,7 +32,7 @@
                     href="{{ route('store.index', $user->id) }}">{{ explode(' ', $user->name)[0] }}'s Store</a>
 
                 <!-- Right elements -->
-                <div class="d-flex align-items-center">
+                <div class="d-flex d-md-none align-items-center">
 
                     @guest
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -47,9 +47,12 @@
                         </a>
                         <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
                             <i class="fas fa-shopping-cart fa-lg"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                {{ Auth::user()->carts()->where('client_id', $user->id)->count() }}
-                            </span>
+                            @if (Auth::user()->carts()->where('client_id', $user->id)->count() > 0)
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ Auth::user()->carts()->where('client_id', $user->id)->count() }}
+                                </span>
+                            @endif
                         </a>
                         <!-- Avatar -->
                         <div class="dropdown">
@@ -125,6 +128,63 @@
                     <!-- Left links -->
                 </div>
                 <!-- Collapsible wrapper -->
+
+                <!-- Right elements -->
+                <div class="d-flex d-none d-md-flex align-items-center">
+
+                    @guest
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">Login</a>
+                            </li>
+                        </ul>
+                    @else
+                        <!-- Icon -->
+                        <a class="" href="#">
+
+                        </a>
+                        <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            @if (Auth::user()->carts()->where('client_id', $user->id)->count() > 0)
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {{ Auth::user()->carts()->where('client_id', $user->id)->count() }}
+                                </span>
+                            @endif
+                        </a>
+                        <!-- Avatar -->
+                        <div class="dropdown">
+                            <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                                id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
+                                aria-expanded="false">
+                                @if ($user->image)
+                                    <img src="{{ asset('storage/user/image/' . $user->image) }}" class="rounded-circle"
+                                        height="27" alt="img" loading="lazy" />
+                                @else
+                                    <img src="{{ asset('storage/user/image/default.jpg') }}" class="rounded-circle"
+                                        height="27" alt="img" loading="lazy" />
+                                @endif
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+
+                            </ul>
+                        </div>
+                    @endguest
+                </div>
+                <!-- Right elements -->
             </div>
             <!-- Container wrapper -->
         </nav>
