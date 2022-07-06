@@ -39,8 +39,10 @@
                 {{ session('product-add-error') }}
             </div>
             <div class="col-4 ">
-                <a href="{{ route('store.cart', $user->id) }}" class="btn btn-primary float-end">View
+                <a href="{{ route('store.cart', $user->id) }}"
+                    class="btn d-none d-md-block btn-primary float-end">View
                     cart</a>
+                <a href="{{ route('store.cart', $user->id) }}" class="btn btn-primary d-md-none float-end">Cart</a>
             </div>
         </div>
     </div>
