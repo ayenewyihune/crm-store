@@ -73,8 +73,9 @@
 
                             <div class="container-fluild form-group">
                                 <label for="image">Product image *</label><br>
-                                <input type="file" id="image" class="{{ $errors->has('image') ? ' is-invalid' : '' }}"
-                                    name="image" accept="image/png, image/jpeg">
+                                <input type="file" id="image"
+                                    class="{{ $errors->has('image') ? ' is-invalid' : '' }}" name="image"
+                                    accept="image/*">
 
                                 @if ($errors->has('image'))
                                     <span class="invalid-feedback" role="alert">
@@ -82,7 +83,8 @@
                                     </span>
                                 @endif
                             </div>
-                            <img src="{{ asset('storage/product/image/' . $product->image) }}" height="80" alt="">
+                            <img src="{{ asset('storage/product/image/' . $product->image) }}" height="80"
+                                alt="">
                         </div>
                     </div>
                 </div>

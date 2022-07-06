@@ -70,8 +70,9 @@
 
                             <div class="container-fluild form-group">
                                 <label for="image">Product image *</label><br>
-                                <input type="file" id="image" class="{{ $errors->has('image') ? ' is-invalid' : '' }}"
-                                    name="image" accept="image/png, image/jpeg" required>
+                                <input type="file" id="image"
+                                    class="{{ $errors->has('image') ? ' is-invalid' : '' }}" name="image"
+                                    accept="image/*" required>
 
                                 @if ($errors->has('image'))
                                     <span class="invalid-feedback" role="alert">
