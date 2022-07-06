@@ -27,11 +27,11 @@ class StoresController extends Controller
     }
 
     // Get products by category
-    public function get_by_category($client_id, $category_id)
+    public function get_by_category($client_id, $category_slug)
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $product_category = ProductCategory::findOrFail($category_id);
+        $product_category = ProductCategory::where('slug', $category_slug)->first();
         $products = $product_category->products()->paginate(30);
         return view('public.store.by_category')->with([
             'user' => $user,
@@ -42,11 +42,11 @@ class StoresController extends Controller
     }
 
     // Show single product
-    public function show_product($client_id, $product_id)
+    public function show_product($client_id, $product_slug)
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $product = Product::findOrFail($product_id);
+        $product = Product::where('slug', $product_slug)->first();
         return view('public.store.show_product')->with([
             'user' => $user,
             'product_categories' => $product_categories,
@@ -55,11 +55,11 @@ class StoresController extends Controller
     }
 
      // Show single product from the category page (url including category)
-    public function show_product_with_category($client_id, $product_id, $category_id)
+    public function show_product_with_category($client_id, $product_slug, $category_slug)
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $product = Product::findOrFail($product_id);
+        $product = Product::where('slug', $product_slug)->first();
         return view('public.store.show_product')->with([
             'user' => $user,
             'product_categories' => $product_categories,
@@ -72,7 +72,7 @@ class StoresController extends Controller
     {
         $products = Auth::user()->carts()->pluck('product_id');
         if (in_array($product_id, $products->toArray())) {
-            return redirect(route('store.products.show',[$client_id, $product_id]))->with('error', 'This product is already in your cart, you can add the quantity there if you need more.');
+            return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('error', 'This product is already in your cart, you can add the quantity there if you need more.');
         }
         $validated = $request->validate(['quantity' => 'required|integer']);
 
@@ -84,7 +84,7 @@ class StoresController extends Controller
         $cart->client_id = $client_id;
         $cart->save();
 
-        return redirect(route('store.products.show',[$client_id, $product_id]))->with('success', $product->name.' added to cart successfully.');
+        return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('success', $product->name.' added to cart successfully.');
     }
 
     // Show cart

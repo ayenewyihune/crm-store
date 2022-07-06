@@ -51,13 +51,15 @@ Auth::routes();
 
 Route::middleware('store.status')->group(function () {
     Route::get('{client_id}', [StoresController::class, 'index'])->name('store.index');
-    Route::get('store/{client_id}/cart', [StoresController::class, 'cart'])->name('store.cart');
-    Route::get('store/{client_id}/cart/delete/{cart_id}', [StoresController::class, 'delete_cart'])->name('store.cart.delete');
-    Route::put('store/{client_id}/cart/update', [StoresController::class, 'update_cart'])->name('store.cart.update');
-    Route::get('store/{client_id}/checkout', [StoresController::class, 'checkout'])->name('store.checkout');
-    Route::post('store/{client_id}/order', [StoresController::class, 'place_order'])->name('store.order.place');
-    Route::get('store/{client_id}/{category_id}', [StoresController::class, 'get_by_category'])->name('store.by_category');
-    Route::get('store/{client_id}/product/{product_id}', [StoresController::class, 'show_product'])->name('store.products.show');
-    Route::get('store/{client_id}/product/{category_id}/{product_id}', [StoresController::class, 'show_product_with_category'])->name('store.products.show_with_category');
-    Route::post('store/{client_id}/product/{product_id}/add-to-cart', [StoresController::class, 'add_to_cart'])->name('store.product.add_to_cart');
+    Route::middleware('auth')->group(function() {
+        Route::get('store/{client_id}/cart', [StoresController::class, 'cart'])->name('store.cart');
+        Route::get('store/{client_id}/cart/delete/{cart_id}', [StoresController::class, 'delete_cart'])->name('store.cart.delete');
+        Route::put('store/{client_id}/cart/update', [StoresController::class, 'update_cart'])->name('store.cart.update');
+        Route::get('store/{client_id}/checkout', [StoresController::class, 'checkout'])->name('store.checkout');
+        Route::post('store/{client_id}/order', [StoresController::class, 'place_order'])->name('store.order.place');
+    });
+    Route::get('store/{client_id}/{category_slug}', [StoresController::class, 'get_by_category'])->name('store.by_category');
+    Route::get('store/{client_id}/product/{product_slug}', [StoresController::class, 'show_product'])->name('store.products.show');
+    Route::get('store/{client_id}/product/{category_slug}/{product_slug}', [StoresController::class, 'show_product_with_category'])->name('store.products.show_with_category');
+    Route::post('store/{client_id}/product/{product_id}/add-to-cart', [StoresController::class, 'add_to_cart'])->name('store.product.add_to_cart')->middleware('auth');
 });

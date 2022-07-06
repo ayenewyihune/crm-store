@@ -7,6 +7,7 @@ use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ProductCategoriesController extends Controller
 {
@@ -30,7 +31,8 @@ class ProductCategoriesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
+            'name' => ['required','string',
+                        Rule::unique('product_categories')->where(fn ($query) => $query->where('user_id', Auth::id()))],
         ]);
 
         $category = new ProductCategory($validated);
@@ -50,7 +52,9 @@ class ProductCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
+            'name' => ['required','string',
+                        Rule::unique('product_categories')->where(fn ($query) => $query->where('user_id', Auth::id()))
+                                                            ->ignore($id)],
         ]);
         $category = ProductCategory::withTrashed()->where('id', $id)->first();
         Gate::authorize('update', $category);

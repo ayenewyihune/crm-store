@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ProductsController extends Controller
 {
@@ -44,7 +45,8 @@ class ProductsController extends Controller
     {
         // Validate form request data
         $validated = $request->validate([
-            'name' => 'required|string',
+            'name' => ['required','string',
+                        Rule::unique('products')->where(fn ($query) => $query->where('user_id', Auth::id()))],
             'price' => 'required|numeric',
             'quantity' => 'required|integer',
             'image' => 'required|image|max:10240'
@@ -99,7 +101,9 @@ class ProductsController extends Controller
     {
         // Validate form request data
         $validated = $request->validate([
-            'name' => 'required|string',
+            'name' => ['required','string',
+                        Rule::unique('products')->where(fn ($query) => $query->where('user_id', Auth::id()))
+                                                            ->ignore($id)],
             'price' => 'required|numeric',
             'quantity' => 'required|integer',
         ]);

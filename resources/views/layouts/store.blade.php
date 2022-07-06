@@ -9,8 +9,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <!-- Google Fonts Roboto -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
     <!-- MDB -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
 </head>
@@ -40,7 +39,7 @@
                                 @for ($i = 0; $i < 5; $i++)
                                     <li class="nav-item">
                                         <a class="nav-link"
-                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
                                     </li>
                                 @endfor
                                 <!-- Dropdown -->
@@ -53,7 +52,7 @@
                                         @for ($i = 5; $i < count($product_categories); $i++)
                                             <li>
                                                 <a class="dropdown-item"
-                                                    href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                                                    href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
                                             </li>
                                         @endfor
                                     </ul>
@@ -62,7 +61,7 @@
                                 @for ($i = 0; $i < count($product_categories); $i++)
                                     <li class="nav-item">
                                         <a class="nav-link"
-                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->id]) }}">{{ $product_categories[$i]->name }}</a>
+                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
                                     </li>
                                 @endfor
                             @endif

@@ -104,7 +104,8 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $product->name }}</td>
-                        <td>{{ $product->image }}</td>
+                        <td><img src="{{ asset('storage/product/image/' . $product->image) }}" height="40"
+                                alt="img"></td>
                         <td>{{ $product->price }}</td>
                         <td>{{ $product->pivot->quantity }}</td>
                     </tr>
@@ -115,7 +116,7 @@
 
     <div class="card-body">
         <div class="text-right">
-            <a href="{{ route('orders.index') }}" class="btn btn-outline-primary mr-2">Back</a>
+            @yield('back-button')
             @if ($order->order_status_id === 1 && $order->client_id === Auth::id())
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#modal-complete">Complete</button>
@@ -163,12 +164,12 @@
                     @method('put')
                     <div class="modal-body">
                         <div class="container-fluild form-group">
-                            <p>Are you sure you want to complete this order?</p>
+                            <p>Are you sure you want to cancel this order?</p>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-icon">Complete</button>
+                        <button type="submit" class="btn btn-danger btn-icon">Cancel</button>
                     </div>
                 </form>
             </div>

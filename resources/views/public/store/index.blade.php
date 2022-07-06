@@ -16,11 +16,11 @@
         @foreach ($products as $product)
             @if ($product->product_categories->isNotEmpty())
                 <div class="col-md-3 p-1">
-                    <a href="{{ route('store.products.show', [$user->id, $product->id]) }}"
+                    <a href="{{ route('store.products.show', [$user->id, $product->slug]) }}"
                         style="text-decoration: none; color:black;">
                         <div class="card">
-                            <img height="250px" width="100%" src="{{ asset('storage/product/image/' . $product->image) }}"
-                                alt="">
+                            <img height="250px" width="100%"
+                                src="{{ asset('storage/product/image/' . $product->image) }}" alt="">
                             <div class="px-3 mb-2">
                                 <h5 class="mb-0" style="font-family: 'Open Sans'">{{ $product->name }}</h5>
                                 <small class="fst-italic fw-light" style="color: darkgray">
