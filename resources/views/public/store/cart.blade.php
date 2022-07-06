@@ -26,15 +26,14 @@
                 <tbody>
                     @foreach ($carts as $cart)
                         <tr>
-                            <td><a class="text-danger"
-                                    href="{{ route('store.cart.delete', [$user->id, $cart->id]) }}"><i
+                            <td><a class="text-danger" href="{{ route('store.cart.delete', [$user->id, $cart->id]) }}"><i
                                         class="fa-regular fa-xl fa-circle-xmark"></i></a></td>
                             <td><img src="{{ asset('storage/product/image/' . $cart->product->image) }}" alt=""
                                     style="width: 45px; height: 45px" /></td>
                             <td>{{ $cart->product->name }}</td>
                             <td>$ {{ $cart->product->price }}</td>
-                            <td><input type="number" name="quantity[{{ $cart->id }}]" id="quantity" step="1" min="1"
-                                    value="{{ $cart->quantity }}" style="width:15%" required></td>
+                            <td><input type="number" name="quantity[{{ $cart->id }}]" id="quantity" step="1"
+                                    min="1" value="{{ $cart->quantity }}" style="width:70px" required></td>
                             <td>$ {{ $cart->quantity * $cart->product->price }}</td>
                         </tr>
                     @endforeach
