@@ -55,7 +55,7 @@ class StoresController extends Controller
     }
 
      // Show single product from the category page (url including category)
-    public function show_product_with_category($client_id, $product_slug, $category_slug)
+    public function show_product_with_category($client_id, $category_slug, $product_slug)
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
