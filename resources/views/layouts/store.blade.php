@@ -27,49 +27,9 @@
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <!-- Collapsible wrapper -->
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Navbar brand -->
-                    <a class="navbar-brand"
-                        href="{{ route('store.index', $user->id) }}">{{ explode(' ', $user->name)[0] }}'s Store</a>
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        @if ($product_categories->isNotEmpty())
-                            @if (count($product_categories) > 5)
-                                @for ($i = 0; $i < 5; $i++)
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
-                                    </li>
-                                @endfor
-                                <!-- Dropdown -->
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                        role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                                        More...
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        @for ($i = 5; $i < count($product_categories); $i++)
-                                            <li>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
-                                            </li>
-                                        @endfor
-                                    </ul>
-                                </li>
-                            @else
-                                @for ($i = 0; $i < count($product_categories); $i++)
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
-                                    </li>
-                                @endfor
-                            @endif
-                        @endif
-                    </ul>
-                    <!-- Left links -->
-                </div>
-                <!-- Collapsible wrapper -->
+                <!-- Navbar brand -->
+                <a class="navbar-brand"
+                    href="{{ route('store.index', $user->id) }}">{{ explode(' ', $user->name)[0] }}'s Store</a>
 
                 <!-- Right elements -->
                 <div class="d-flex align-items-center">
@@ -124,6 +84,47 @@
                     @endguest
                 </div>
                 <!-- Right elements -->
+
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if ($product_categories->isNotEmpty())
+                            @if (count($product_categories) > 5)
+                                @for ($i = 0; $i < 5; $i++)
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
+                                    </li>
+                                @endfor
+                                <!-- Dropdown -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                        role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                                        More...
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        @for ($i = 5; $i < count($product_categories); $i++)
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
+                                            </li>
+                                        @endfor
+                                    </ul>
+                                </li>
+                            @else
+                                @for ($i = 0; $i < count($product_categories); $i++)
+                                    <li class="nav-item">
+                                        <a class="nav-link"
+                                            href="{{ route('store.by_category', [$user->id, $product_categories[$i]->slug]) }}">{{ $product_categories[$i]->name }}</a>
+                                    </li>
+                                @endfor
+                            @endif
+                        @endif
+                    </ul>
+                    <!-- Left links -->
+                </div>
+                <!-- Collapsible wrapper -->
             </div>
             <!-- Container wrapper -->
         </nav>
