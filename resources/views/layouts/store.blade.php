@@ -34,6 +34,19 @@
                 <!-- Right elements -->
                 <div class="d-flex d-md-none align-items-center">
 
+                    <!-- Icons -->
+                    <a href="{{ route('welcome') }}" class="position-relative text-reset me-3">
+                        <i class="fas fa-home fa-lg"></i>
+                    </a>
+                    <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        @if (session('cart_' . $user->id) && count(session('cart_' . $user->id)) > 0)
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                {{ array_sum(array_map(function ($item) {return $item['quantity'];}, session('cart_' . $user->id))) }}
+                            </span>
+                        @endif
+                    </a>
                     @guest
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -41,19 +54,6 @@
                             </li>
                         </ul>
                     @else
-                        <!-- Icon -->
-                        <a class="" href="#">
-
-                        </a>
-                        <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
-                            <i class="fas fa-shopping-cart fa-lg"></i>
-                            @if (session('cart') && count(session('cart')) > 0)
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                                    {{ array_sum(array_map(function ($item) {return $item['quantity'];}, session('cart'))) }}
-                                </span>
-                            @endif
-                        </a>
                         <!-- Avatar -->
                         <div class="dropdown">
                             <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
@@ -132,13 +132,16 @@
                 <!-- Right elements -->
                 <div class="d-flex d-none d-md-flex align-items-center">
 
-                    <!-- Icon -->
+                    <!-- Icons -->
+                    <a href="{{ route('welcome') }}" class="position-relative text-reset me-3">
+                        <i class="fas fa-home fa-lg"></i>
+                    </a>
                     <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
                         <i class="fas fa-shopping-cart fa-lg"></i>
-                        @if (session('cart') && count(session('cart')) > 0)
+                        @if (session('cart_' . $user->id) && count(session('cart_' . $user->id)) > 0)
                             <span
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
-                                {{ array_sum(array_map(function ($item) {return $item['quantity'];}, session('cart'))) }}
+                                {{ array_sum(array_map(function ($item) {return $item['quantity'];}, session('cart_' . $user->id))) }}
                             </span>
                         @endif
                     </a>
@@ -196,10 +199,11 @@
         </div>
     </div>
 
-    <footer class="bg-light text-center text-lg-start">
+    <footer class="bg-light text-center text-lg-start mt-5">
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-            Copyright &copy; {{ now()->year }} <a href="https://crm-demo.com/" target="_blank">CRM and Store</a>.
+            Copyright &copy; {{ now()->year }} <a href="http://ec2-54-73-20-77.eu-west-1.compute.amazonaws.com">CRM
+                and Store</a>.
         </div>
         <!-- Copyright -->
     </footer>

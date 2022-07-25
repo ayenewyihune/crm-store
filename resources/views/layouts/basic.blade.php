@@ -88,6 +88,15 @@
         </div>
     </div>
 
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            Copyright &copy; {{ now()->year }} <a href="http://ec2-54-73-20-77.eu-west-1.compute.amazonaws.com">CRM
+                and Store</a>.
+        </div>
+        <!-- Copyright -->
+    </footer>
+
     <!-- jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

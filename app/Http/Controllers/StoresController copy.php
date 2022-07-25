@@ -89,10 +89,12 @@ class StoresController extends Controller
     {
         $request->validate(['quantity' => 'required|integer|gt:0']);
         $product = Product::findOrFail($product_id);
-        $cart = session('cart_'.$client_id);
+        if (session('cart')) {
+            $cart = session('cart')[$client_id];
+        }
         // If cart is empty, add it as the first product
         if (!$cart) {
-            $cart = [
+            $cart[$client_id] = [
                     $product_id => [
                         "name" => $product->name,
                         "quantity" => $request->input('quantity'),
@@ -100,23 +102,23 @@ class StoresController extends Controller
                         "image" => $product->image
                     ]
             ];
-            session(['cart_'.$client_id => $cart]);
+            session(['cart['.$client_id.']' => $cart[$client_id]]);
             return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
         }
         // If cart is not empty, check if this product exists and increment quantity
-        if(isset($cart[$product_id])) {
-            $cart[$product_id]['quantity'] += $request->input('quantity');
-            session(['cart_'.$client_id => $cart]);
+        if(isset($cart[$client_id][$product_id])) {
+            $cart[$client_id][$product_id]['quantity'] += $request->input('quantity');
+            session(['cart['.$client_id.']' => $cart[$client_id]]);
             return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
         }
         // If item does not exist in cart, add it to cart as new
-        $cart[$product_id] = [
+        $cart[$client_id][$product_id] = [
             "name" => $product->name,
             "quantity" => $request->input('quantity'),
             "price" => $product->price,
             "image" => $product->image
         ];
-        session(['cart_'.$client_id => $cart]);
+        session(['cart['.$client_id.']' => $cart[$client_id]]);
         return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
     }
 
@@ -125,7 +127,7 @@ class StoresController extends Controller
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $cart = session('cart_'.$client_id);
+        $cart = session('cart')[$client_id];
         $total_before_tax = 0;
         if ($cart) {
             foreach ($cart as $item) {
@@ -143,9 +145,9 @@ class StoresController extends Controller
     // Delete single product from cart
     public function delete_cart($client_id, $product_id)
     {
-        $cart = session('cart_'.$client_id);
+        $cart = session('cart')[$client_id];
         unset($cart[$product_id]);
-        session(['cart_'.$client_id => $cart]);
+        session(['cart['.$client_id.']' => $cart[$client_id]]);
         return redirect(route('store.cart',[$client_id]))->with('success', 'Cart product deleted successfully.');
     }
 
@@ -154,11 +156,11 @@ class StoresController extends Controller
     {
         $request->validate(['quantity.*' => 'required|integer|gt:0']);
         $quantities = $request->input('quantity');
-        $cart = session('cart_'.$client_id);
+        $cart = session('cart')[$client_id];
         foreach ($quantities as $key=>$quantity) {
             $cart[$key]["quantity"] = $quantity;
         }
-        session(['cart_'.$client_id => $cart]);
+        session(['cart['.$client_id.']' => $cart[$client_id]]);
         return redirect(route('store.cart', $client_id))->with('success', 'Update successful.');
     }
 
@@ -167,7 +169,7 @@ class StoresController extends Controller
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $cart = session('cart_'.$client_id);
+        $cart = session('cart')[$client_id];
         if (!$cart) {
             return redirect(route('store.cart', $client_id))->with('error', 'You cannot proceed to checkout while the cart is empty.');
         }
@@ -186,7 +188,7 @@ class StoresController extends Controller
     // Place order (checkout)
     public function place_order(Request $request, $client_id)
     {
-        $cart = session('cart_'.$client_id);
+        $cart = session('cart')[$client_id];
         $products = Product::select('id','quantity')->whereIn('id', array_keys($cart))->pluck('quantity','id');
         foreach ($cart as $key=>$item) {
             if ($products[$key] < $item['quantity']) {
