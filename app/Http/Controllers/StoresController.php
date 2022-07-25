@@ -219,7 +219,7 @@ class StoresController extends Controller
             Product::find($key)->decrement('quantity', $item['quantity']);
         }
 
-        session()->forget('cart');
+        session()->forget('cart_'.$client_id);
 
         return redirect(route('store.index', $client_id))->with('success', 'Your order received successfully.');
     }
