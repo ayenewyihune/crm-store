@@ -34,8 +34,7 @@
                             <div class="col-md-6">
                                 <div class="form-outline mb-4">
                                     <input type="text" id="last_name" name="last_name"
-                                        class="form-control{{ $errors->has('last_name') ? ' is-invalid' : '' }}"
-                                        required />
+                                        class="form-control{{ $errors->has('last_name') ? ' is-invalid' : '' }}" required />
                                     <label class="form-label" for="last_name">Last name *</label>
 
                                     @if ($errors->has('last_name'))
@@ -378,7 +377,8 @@
                         </div>
 
                         <div class="form-outline">
-                            <textarea class="form-control{{ $errors->has('remark') ? ' is-invalid' : '' }}" id="remark" name="remark" rows="4"></textarea>
+                            <textarea class="form-control{{ $errors->has('remark') ? ' is-invalid' : '' }}" id="remark" name="remark"
+                                rows="4"></textarea>
                             <label class="form-label" for="remark">Additional remark (optional)</label>
 
                             @if ($errors->has('remark'))
@@ -401,10 +401,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($carts as $cart)
+                            @foreach ($cart as $item)
                                 <tr>
-                                    <td>{{ $cart->product->name }} x {{ $cart->quantity }}</td>
-                                    <td>$ {{ $cart->quantity * $cart->product->price }}</td>
+                                    <td>{{ $item['name'] }} x {{ $item['quantity'] }}</td>
+                                    <td>$ {{ $item['quantity'] * $item['price'] }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

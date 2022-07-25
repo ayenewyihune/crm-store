@@ -9,18 +9,11 @@ use Illuminate\Support\Facades\Gate;
 
 class OrdersController extends Controller
 {
-    // Show orders to the store of the uthenticated user
+    // Show orders to the store of the authenticated user
     public function index()
     {
         $orders = Order::where('client_id', Auth::id())->paginate(10);
         return view('orders.index_order')->with('orders',$orders);
-    }
-
-    // Show orders by the authenticated user to other stores
-    public function my_orders()
-    {
-        $orders = Auth::user()->orders()->paginate(10);
-        return view('orders.index_my_order')->with('orders',$orders);
     }
 
     // Show details of a single order
@@ -29,14 +22,6 @@ class OrdersController extends Controller
         $order = Order::findOrFail($id);
         Gate::authorize('view', $order);
         return view('orders.show_order')->with('order',$order);
-    }
-
-    // Show details of a single order by the authenticated user to other stores
-    public function show_my_order($id)
-    {
-        $order = Order::findOrFail($id);
-        Gate::authorize('view', $order);
-        return view('orders.show_my_order')->with('order',$order);
     }
     
     // Confirm/accept order

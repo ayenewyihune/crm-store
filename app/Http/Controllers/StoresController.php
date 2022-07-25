@@ -7,12 +7,29 @@ use App\Models\User;
 use App\Models\Store;
 use App\Models\Product;
 use App\Models\ProductCategory;
-use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class StoresController extends Controller
 {
+    // Show latest products in all stores
+    public function welcome()
+    {
+        $products = Product::latest()->take(30)->get();
+        return view('public.welcome')->with([
+            'products' => $products,
+        ]);
+    }
+
+    // Show list of all stores
+    public function listing()
+    {
+        $stores = Store::paginate(30);
+        return view('public.listing')->with([
+            'stores' => $stores,
+        ]);
+    }
+
     // Show latest products in a specific store
     public function index($client_id)
     {
@@ -70,20 +87,36 @@ class StoresController extends Controller
     // Add a product to cart
     public function add_to_cart(Request $request, $client_id, $product_id)
     {
-        $products = Auth::user()->carts()->pluck('product_id');
-        if (in_array($product_id, $products->toArray())) {
-            return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add-error', 'This product is already in your cart, you can add the quantity there if you need more.');
-        }
-        $validated = $request->validate(['quantity' => 'required|integer']);
-
+        $request->validate(['quantity' => 'required|integer|gt:0']);
         $product = Product::findOrFail($product_id);
-
-        $cart = new Cart($validated);
-        $cart->user_id = Auth::id();
-        $cart->product_id = $product_id;
-        $cart->client_id = $client_id;
-        $cart->save();
-
+        $cart = session('cart');
+        // If cart is empty, add it as the first product
+        if (!$cart) {
+            $cart = [
+                    $product_id => [
+                        "name" => $product->name,
+                        "quantity" => $request->input('quantity'),
+                        "price" => $product->price,
+                        "image" => $product->image
+                    ]
+            ];
+            session(['cart' => $cart]);
+            return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
+        }
+        // If cart is not empty, check if this product exists and increment quantity
+        if(isset($cart[$product_id])) {
+            $cart[$product_id]['quantity'] += $request->input('quantity');
+            session(['cart' => $cart]);
+            return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
+        }
+        // If item does not exist in cart, add it to cart as new
+        $cart[$product_id] = [
+            "name" => $product->name,
+            "quantity" => $request->input('quantity'),
+            "price" => $product->price,
+            "image" => $product->image
+        ];
+        session(['cart' => $cart]);
         return redirect(route('store.products.show',[$client_id, Product::findOrFail($product_id)->slug]))->with('product-add', $product->name.' added to cart successfully.');
     }
 
@@ -92,37 +125,40 @@ class StoresController extends Controller
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $carts = Auth::user()->carts()->where('client_id', $client_id)->get();
+        $cart = session('cart');
         $total_before_tax = 0;
-        foreach ($carts as $cart) {
-            $total_before_tax += $cart->quantity * $cart->product->price;
+        if ($cart) {
+            foreach ($cart as $item) {
+                $total_before_tax += $item['quantity'] * $item['price'];
+            }
         }
         return view('public.store.cart')->with([
             'user' => $user,
             'product_categories' => $product_categories,
-            'carts' => $carts,
+            'cart' => $cart,
             'total_before_tax' => $total_before_tax,
         ]);
     }
 
     // Delete single product from cart
-    public function delete_cart($client_id, $cart_id)
+    public function delete_cart($client_id, $product_id)
     {
-        $cart = Cart::findOrFail($cart_id);
-        $cart->delete();
+        $cart = session('cart');
+        unset($cart[$product_id]);
+        session(['cart' => $cart]);
         return redirect(route('store.cart',[$client_id]))->with('success', 'Cart product deleted successfully.');
     }
 
     // Update quantity in the cart
     public function update_cart(Request $request, $client_id)
     {
-        $request->validate(['quantity.*' => 'required|integer']);
+        $request->validate(['quantity.*' => 'required|integer|gt:0']);
         $quantities = $request->input('quantity');
-        foreach ($quantities as $key => $quantity) {
-            $cart = Cart::findOrFail($key);
-            $cart->quantity = $quantity;
-            $cart->update();
+        $cart = session('cart');
+        foreach ($quantities as $key=>$quantity) {
+            $cart[$key]["quantity"] = $quantity;
         }
+        session(['cart' => $cart]);
         return redirect(route('store.cart', $client_id))->with('success', 'Update successful.');
     }
 
@@ -131,18 +167,18 @@ class StoresController extends Controller
     {
         $user = User::findOrFail($client_id);
         $product_categories = $user->product_categories;
-        $carts = Auth::user()->carts()->where('client_id', $client_id)->get();
-        if ($carts->isEmpty()) {
+        $cart = session('cart');
+        if (!$cart) {
             return redirect(route('store.cart', $client_id))->with('error', 'You cannot proceed to checkout while the cart is empty.');
         }
         $total_before_tax = 0;
-        foreach ($carts as $cart) {
-            $total_before_tax += $cart->quantity * $cart->product->price;
+        foreach ($cart as $item) {
+            $total_before_tax += $item['quantity'] * $item['price'];
         }
         return view('public.store.checkout')->with([
             'user' => $user,
             'product_categories' => $product_categories,
-            'carts' => $carts,
+            'cart' => $cart,
             'total_before_tax' => $total_before_tax,
         ]);
     }
@@ -150,11 +186,11 @@ class StoresController extends Controller
     // Place order (checkout)
     public function place_order(Request $request, $client_id)
     {
-        $carts = Auth::user()->carts()->where('client_id', $client_id)->get();
-        $products = Product::select('id','quantity')->whereIn('id', $carts->pluck('product_id'))->pluck('quantity','id');
-        foreach ($carts as $cart) {
-            if ($products[$cart->product_id] < $cart->quantity) {
-                return redirect(route('store.cart',[$client_id]))->with('error', 'Availiable quantity for '.$cart->product->name.' is '.$products[$cart->product_id].'. But '.$cart->quantity.' ordered.');
+        $cart = session('cart');
+        $products = Product::select('id','quantity')->whereIn('id', array_keys($cart))->pluck('quantity','id');
+        foreach ($cart as $key=>$item) {
+            if ($products[$key] < $item['quantity']) {
+                return redirect(route('store.cart',[$client_id]))->with('error', 'Availiable quantity for '.$item['name'].' is '.$products[$key].'. But '.$item['quantity'].' ordered.');
             }
         }
 
@@ -173,18 +209,17 @@ class StoresController extends Controller
         ]);
 
         $order = new Order($validated_order);
-        $order->user_id = Auth::id();
         $order->client_id = $client_id;
         $order->order_status_id = 1;
 
         $order->save();
 
-        foreach ($carts as $cart) {
-            $order->products()->attach($cart->product_id, ['quantity' => $cart->quantity]);
-            Product::find($cart->product_id)->decrement('quantity', $cart->quantity);
+        foreach ($cart as $key=>$item) {
+            $order->products()->attach($key, ['quantity' => $item['quantity']]);
+            Product::find($key)->decrement('quantity', $item['quantity']);
         }
 
-        Auth::user()->carts()->where('client_id', $client_id)->delete();
+        session()->forget('cart');
 
         return redirect(route('store.index', $client_id))->with('success', 'Your order received successfully.');
     }

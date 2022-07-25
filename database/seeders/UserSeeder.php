@@ -17,9 +17,9 @@ class UserSeeder extends Seeder
     public function run()
     {
         $user = new User();
-        $user->name = 'Ayenew Yihune';
-        $user->email = 'ayennew@gmail.com';
-        $user->password = Hash::make('12345678910');
+        $user->name = 'Admin';
+        $user->email = 'admin@example.com';
+        $user->password = Hash::make('12345678');
         $user->save();
 
         Store::create([
@@ -27,5 +27,17 @@ class UserSeeder extends Seeder
         ]);
 
         $user->roles()->attach([1,2]);
+
+        $user = new User();
+        $user->name = 'Client';
+        $user->email = 'client@example.com';
+        $user->password = Hash::make('12345678');
+        $user->save();
+
+        Store::create([
+            'user_id' => $user->id
+        ]);
+
+        $user->roles()->attach(2);
     }
 }

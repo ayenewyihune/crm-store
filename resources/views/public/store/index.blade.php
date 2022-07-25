@@ -19,8 +19,8 @@
                     <a href="{{ route('store.products.show', [$user->id, $product->slug]) }}"
                         style="text-decoration: none; color:black;">
                         <div class="card">
-                            <img height="250px" width="100%"
-                                src="{{ asset('storage/product/image/' . $product->image) }}" alt="">
+                            <img height="250px" width="100%" src="{{ asset('storage/product/image/' . $product->image) }}"
+                                alt="">
                             <div class="px-3 mb-2">
                                 <h5 class="mb-0" style="font-family: 'Open Sans'">{{ $product->name }}</h5>
                                 <small class="fst-italic fw-light" style="color: darkgray">
@@ -34,32 +34,3 @@
         @endforeach
     </div>
 @endsection
-
-{{-- @section('script')
-    <script>
-        $(document).ready(function() {
-            fetch_products();
-
-            function fetch_products(query = '') {
-
-                $.ajax({
-                    url: "{{ route('member_search') }}",
-                    method: 'GET',
-                    data: {
-                        query: query
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        $("#membersList").html(data.table_data);
-                        $("#total_records").text(data.total_data);
-                    }
-                });
-            }
-
-            $(document).on('keyup', '#search', function() {
-                var query = $(this).val();
-                fetch_member_data(query);
-            });
-        });
-    </script>
-@endsection --}}

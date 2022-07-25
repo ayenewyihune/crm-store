@@ -1,45 +1,36 @@
 @extends('layouts.basic')
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="d-flex justify-content-center align-items-center" style="height: 70vh">
-                    <div id="title" class="text-center center" style="opacity:0;">
-                        <h3>Demo Stores</h3>
-                        <hr>
-
-                        <h4 class="display-4 mb-3" style="font-size: 1.1rem">Welcome to Demo Stores. Purchase online, get
-                            your own store and add your
-                            products. Access any store you want and have the client_id at www.demostore.com/client_id</h4>
-                        @guest
-                            <div class="text-center">
-                                <a href="{{ route('login') }}" class="px-4 btn btn-primary">Login</a>
-                                <a href="{{ route('register') }}" class="px-4 btn btn-outline-primary">Register</a>
-                            </div>
-                        @else
-                            <div class="text-center">
-                                <a href="{{ route('dashboard') }}" class="px-4 btn btn-primary">Dashboard</a>
-                                <a href="{{ route('store.index', Auth::id()) }}" class="px-4 btn btn-outline-primary">Your
-                                    store</a>
-                            </div>
-                        @endguest
-                    </div>
+    <div class="pt-3 p-md-5">
+        <div class="text-center">
+            <h1 class="display-1">Welcome</h1>
+            <div class="row">
+                <div class="col-2 offset-5">
+                    <hr class="bg-dark mx-4" style="height: 2px">
                 </div>
             </div>
+            <p>Explore recently added products in all our stores...</p>
         </div>
     </div>
-@endsection
-
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $("#title").animate({
-                opacity: '1'
-            }, 500);
-            $("#desc").animate({
-                opacity: '1'
-            }, 1000);
-        });
-    </script>
+    <div class="row">
+        @foreach ($products as $product)
+            @if ($product->product_categories->isNotEmpty())
+                <div class="col-md-3 p-1">
+                    <a href="{{ route('store.products.show', [$product->user_id, $product->slug]) }}"
+                        style="text-decoration: none; color:black;">
+                        <div class="card">
+                            <img height="250px" width="100%" src="{{ asset('storage/product/image/' . $product->image) }}"
+                                alt="">
+                            <div class="px-3 mb-2">
+                                <h5 class="mb-0" style="font-family: 'Open Sans'">{{ $product->name }}</h5>
+                                <small class="fst-italic fw-light" style="color: darkgray">
+                                    {{ implode(', ',$product->product_categories()->pluck('name')->toArray()) }}</small>
+                                <p>$ {{ $product->price }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endif
+        @endforeach
+    </div>
 @endsection

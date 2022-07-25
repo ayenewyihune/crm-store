@@ -24,31 +24,61 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <!-- Container wrapper -->
             <div class="container">
+
                 <!-- Navbar brand -->
-                <a class="navbar-brand me-2" href="/">
-                    Demo Stores
-                </a>
+                <a class="navbar-brand" href="{{ route('welcome') }}">Stores</a>
 
-                <div class="d-flex align-items-end">
-                    @guest
-                        <a href="{{ route('login') }}" class="btn btn-link px-3 me-2">Login</a>
-                        <a href="{{ route('register') }}" class="btn btn-link px-3 me-2">Register </a>
-                    @else
-                        <a href="{{ route('dashboard') }}" class="btn btn-link px-3 me-2">Dashboard</a>
+                <!-- Left links -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('store.listing') }}">Listing</a>
+                    </li>
+                </ul>
+                <!-- Left links -->
 
-                        <a class="btn btn-link px-3 me-2" href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout
+                <!-- Right elements -->
+                @guest
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-flex">
+                            <a class="nav-link me-2" href="{{ route('login') }}">Login</a>
+                            <a class="nav-link me-2" href="{{ route('register') }}">Register</a>
+                        </li>
+                    </ul>
+                @else
+                    <!-- Avatar -->
+                    <div class="dropdown">
+                        <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                            id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                            @if (Auth::user()->image)
+                                <img src="{{ asset('storage/user/image/' . Auth::user()->image) }}" class="rounded-circle"
+                                    height="27" alt="img" loading="lazy" />
+                            @else
+                                <img src="{{ asset('storage/user/image/default.jpg') }}" class="rounded-circle"
+                                    height="27" alt="img" loading="lazy" />
+                            @endif
                         </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    @endguest
-                </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
+                @endguest
+                <!-- Right elements -->
             </div>
             <!-- Container wrapper -->
         </nav>
-        <!-- Navbar -->
     </header>
 
     <div class="bg-light min-vh-70 d-flex flex-row align-items-center">

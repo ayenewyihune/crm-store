@@ -24,19 +24,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($carts as $cart)
-                        <tr>
-                            <td><a class="text-danger" href="{{ route('store.cart.delete', [$user->id, $cart->id]) }}"><i
-                                        class="fa-regular fa-xl fa-circle-xmark"></i></a></td>
-                            <td><img src="{{ asset('storage/product/image/' . $cart->product->image) }}" alt=""
-                                    style="width: 45px; height: 45px" /></td>
-                            <td>{{ $cart->product->name }}</td>
-                            <td>$ {{ $cart->product->price }}</td>
-                            <td><input type="number" name="quantity[{{ $cart->id }}]" id="quantity" step="1"
-                                    min="1" value="{{ $cart->quantity }}" style="width:70px" required></td>
-                            <td>$ {{ $cart->quantity * $cart->product->price }}</td>
-                        </tr>
-                    @endforeach
+                    @if ($cart)
+                        @foreach ($cart as $key => $item)
+                            <tr>
+                                <td><a class="text-danger" href="{{ route('store.cart.delete', [$user->id, $key]) }}"><i
+                                            class="fa-regular fa-xl fa-circle-xmark"></i></a></td>
+                                <td><img src="{{ asset('storage/product/image/' . $item['image']) }}" alt=""
+                                        style="width: 45px; height: 45px" /></td>
+                                <td>{{ $item['name'] }}</td>
+                                <td>$ {{ $item['price'] }}</td>
+                                <td><input type="number" name="quantity[{{ $key }}]" id="quantity" step="1"
+                                        min="1" value="{{ $item['quantity'] }}" style="width:70px" required></td>
+                                <td>$ {{ $item['quantity'] * $item['price'] }}</td>
+                            </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

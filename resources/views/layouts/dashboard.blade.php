@@ -68,8 +68,7 @@
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 Logout
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         </li>
@@ -129,23 +128,11 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                        <li class="nav-item">
+                            <a href="{{ route('orders.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-cart-shopping"></i>
-                                <p>Orders<i class="right fa fa-angle-left"></i></p>
+                                <p>Orders</p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('orders.index') }}" class="nav-link">
-                                        <p>Orders to you</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('orders.my_orders') }}" class="nav-link">
-                                        <p>Your orders</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>

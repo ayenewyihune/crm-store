@@ -47,10 +47,10 @@
                         </a>
                         <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
                             <i class="fas fa-shopping-cart fa-lg"></i>
-                            @if (Auth::user()->carts()->where('client_id', $user->id)->count() > 0)
+                            @if (session('cart') && count(session('cart')) > 0)
                                 <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ Auth::user()->carts()->where('client_id', $user->id)->count() }}
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                    {{ array_sum(array_map(function ($item) {return $item['quantity'];}, session('cart'))) }}
                                 </span>
                             @endif
                         </a>
@@ -59,9 +59,9 @@
                             <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
                                 id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
                                 aria-expanded="false">
-                                @if ($user->image)
-                                    <img src="{{ asset('storage/user/image/' . $user->image) }}" class="rounded-circle"
-                                        height="27" alt="img" loading="lazy" />
+                                @if (Auth::user()->image)
+                                    <img src="{{ asset('storage/user/image/' . Auth::user()->image) }}"
+                                        class="rounded-circle" height="27" alt="img" loading="lazy" />
                                 @else
                                     <img src="{{ asset('storage/user/image/default.jpg') }}" class="rounded-circle"
                                         height="27" alt="img" loading="lazy" />
@@ -132,34 +132,34 @@
                 <!-- Right elements -->
                 <div class="d-flex d-none d-md-flex align-items-center">
 
+                    <!-- Icon -->
+                    <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        @if (session('cart') && count(session('cart')) > 0)
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                {{ array_sum(array_map(function ($item) {return $item['quantity'];}, session('cart'))) }}
+                            </span>
+                        @endif
+                    </a>
                     @guest
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">Login</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">Register</a>
+                            </li>
                         </ul>
                     @else
-                        <!-- Icon -->
-                        <a class="" href="#">
-
-                        </a>
-                        <a class="position-relative text-reset me-3" href="{{ route('store.cart', $user->id) }}">
-                            <i class="fas fa-shopping-cart fa-lg"></i>
-                            @if (Auth::user()->carts()->where('client_id', $user->id)->count() > 0)
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ Auth::user()->carts()->where('client_id', $user->id)->count() }}
-                                </span>
-                            @endif
-                        </a>
                         <!-- Avatar -->
                         <div class="dropdown">
                             <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
                                 id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown"
                                 aria-expanded="false">
-                                @if ($user->image)
-                                    <img src="{{ asset('storage/user/image/' . $user->image) }}" class="rounded-circle"
-                                        height="27" alt="img" loading="lazy" />
+                                @if (Auth::user()->image)
+                                    <img src="{{ asset('storage/user/image/' . Auth::user()->image) }}"
+                                        class="rounded-circle" height="27" alt="img" loading="lazy" />
                                 @else
                                     <img src="{{ asset('storage/user/image/default.jpg') }}" class="rounded-circle"
                                         height="27" alt="img" loading="lazy" />
