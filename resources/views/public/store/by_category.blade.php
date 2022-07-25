@@ -6,7 +6,7 @@
             <h3 class="text-black">{{ $product_category->name }}</h3>
             <div class="row">
                 <div class="col-2 offset-5">
-                    <hr class="bg-dark mx-4" style="height: 2px">
+                    <hr class="bg-dark mx-md-4" style="height: 2px">
                 </div>
             </div>
         </div>

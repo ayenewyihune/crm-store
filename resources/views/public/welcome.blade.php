@@ -6,7 +6,7 @@
             <h1 class="display-1">Welcome</h1>
             <div class="row">
                 <div class="col-2 offset-5">
-                    <hr class="bg-dark mx-4" style="height: 2px">
+                    <hr class="bg-dark mx-md-4" style="height: 2px">
                 </div>
             </div>
             <p>Explore recently added products in all our stores...</p>
