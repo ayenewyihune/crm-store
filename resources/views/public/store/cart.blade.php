@@ -38,6 +38,10 @@
                                 <td>$ {{ $item['quantity'] * $item['price'] }}</td>
                             </tr>
                         @endforeach
+                    @else
+                        <tr>
+                            <td colspan="6" class="text-center">No items in the cart</td>
+                        </tr>
                     @endif
                 </tbody>
             </table>
