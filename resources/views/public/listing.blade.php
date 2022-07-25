@@ -13,7 +13,7 @@
     </div>
     <div class="row">
         @foreach ($stores as $store)
-            <div class="col-md-4 p-1 mx-3 mb-5">
+            <div class="col-md-4 p-2 mb-5">
                 <a href="{{ route('store.index', $store->user->id) }}" style="text-decoration: none; color:black;">
                     <div class="card">
                         <img height="300px" width="100%" src="{{ asset('storage/store.jpg') }}" alt="">
