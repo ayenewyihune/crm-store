@@ -26,12 +26,14 @@
             <div class="container">
 
                 <!-- Navbar brand -->
-                <a class="navbar-brand" href="{{ route('welcome') }}">Stores</a>
+                <a class="navbar-brand" href="{{ route('welcome') }}">
+                    <img src="{{ asset('gebeya-logo.png') }}" alt="" width="90" height="35">
+                </a>
 
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('store.listing') }}">Listing</a>
+                        <a class="nav-link" href="{{ route('store.listing') }}">Stores List</a>
                     </li>
                 </ul>
                 <!-- Left links -->
