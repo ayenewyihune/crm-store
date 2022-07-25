@@ -14,8 +14,8 @@ class DeleteUserIdFromOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropForeign('user_id');
-            $table->dropColumn('user_id');
+            $table->dropForeign(['user_id']);
+            $table->dropColumn(['user_id']);
         });
     }
 
