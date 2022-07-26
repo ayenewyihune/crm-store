@@ -8,6 +8,10 @@ use App\Http\Controllers\StoresController;
 use App\Http\Controllers\ProductCategoriesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\Admin\HomeController as AdminHomeController;
+use App\Http\Controllers\Admin\ProductCategoriesController as AdminProductCategoriesController;
+use App\Http\Controllers\Admin\ProductsController as AdminProductsController;
+use App\Http\Controllers\Admin\OrdersController as AdminOrdersController;
 
 
 /*
@@ -31,16 +35,22 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::get('stores/deactivated', [StoresController::class, 'admin_deactivated_index'])->name('stores.deactivated.index');
     Route::delete('stores/{id}', [StoresController::class, 'admin_destroy'])->name('stores.destroy');
     Route::get('stores/{id}/restore', [StoresController::class, 'admin_restore'])->name('stores.restore');
+
+    // Impersonation
+    Route::get('/{client_id}/dashboard', [AdminHomeController::class, 'index'])->name('dashboard');
+    Route::resource('{client_id}/product-categories', AdminProductCategoriesController::class);
+    Route::put('/{client_id}/product-categories/{id}/toggle-hide', [AdminProductCategoriesController::class,'toggle_hide'])->name('product-categories.toggle');
+    Route::resource('/{client_id}/products', AdminProductsController::class);
+    Route::resource('/{client_id}/orders', AdminOrdersController::class);
+    Route::put('/{client_id}/orders/{id}/complete', [AdminOrdersController::class, 'complete'])->name('orders.complete');
+    Route::put('/{client_id}/orders/{id}/cancel', [AdminOrdersController::class, 'cancel'])->name('orders.cancel');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::resource('users', UsersController::class);
     Route::resource('product-categories', ProductCategoriesController::class);
     Route::put('product-categories/{id}/toggle-hide', [ProductCategoriesController::class,'toggle_hide'])->name('product-categories.toggle');
     Route::resource('products', ProductsController::class);
-    Route::get('orders/my-orders', [OrdersController::class, 'my_orders'])->name('orders.my_orders');
-    Route::get('orders/my-orders/{id}', [OrdersController::class, 'show_my_order'])->name('orders.show_my_order');
     Route::resource('orders', OrdersController::class);
     Route::put('orders/{id}/complete', [OrdersController::class, 'complete'])->name('orders.complete');
     Route::put('orders/{id}/cancel', [OrdersController::class, 'cancel'])->name('orders.cancel');

@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboard_admin')
 
 @section('content')
     <div class="container-fluid">
@@ -116,8 +116,8 @@
 
     <div class="card-body">
         <div class="text-right">
-            <a href="{{ route('orders.index') }}" class="btn btn-outline-primary mr-2">Back</a>
-            @if ($order->order_status_id === 1 && $order->client_id === Auth::id())
+            <a href="{{ route('admin.orders.index', $client->id) }}" class="btn btn-outline-primary mr-2">Back</a>
+            @if ($order->order_status_id === 1 && $order->client_id === $client->id)
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                     data-bs-target="#modal-complete">Complete</button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
@@ -134,7 +134,7 @@
                     <h5 class="modal-title" id="completeModalLabel">Complete product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('orders.complete', $order->id) }}" method="POST">
+                <form action="{{ route('admin.orders.complete', [$client->id, $order->id]) }}" method="POST">
                     @csrf
                     @method('put')
                     <div class="modal-body">
@@ -159,7 +159,7 @@
                     <h5 class="modal-title" id="cancelModalLabel">Cancel product</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('orders.cancel', $order->id) }}" method="POST">
+                <form action="{{ route('admin.orders.cancel', [$client->id, $order->id]) }}" method="POST">
                     @csrf
                     @method('put')
                     <div class="modal-body">

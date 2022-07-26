@@ -13,7 +13,7 @@ class OrdersController extends Controller
     public function index()
     {
         $orders = Order::where('client_id', Auth::id())->paginate(10);
-        return view('orders.index_order')->with('orders',$orders);
+        return view('orders.index')->with('orders',$orders);
     }
 
     // Show details of a single order
@@ -21,7 +21,7 @@ class OrdersController extends Controller
     {
         $order = Order::findOrFail($id);
         Gate::authorize('view', $order);
-        return view('orders.show_order')->with('order',$order);
+        return view('orders.show')->with('order',$order);
     }
     
     // Confirm/accept order

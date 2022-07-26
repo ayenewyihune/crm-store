@@ -20,7 +20,7 @@ class ProductCategoryPolicy
      */
     public function update(User $user, ProductCategory $productCategory)
     {
-        return $user->id === $productCategory->user_id
+        return $user->id === $productCategory->user_id || $user->is_admin()
                 ? Response::allow()
                 : Response::deny('You are not allowed to do this action.');
     }
@@ -34,7 +34,7 @@ class ProductCategoryPolicy
      */
     public function delete(User $user, ProductCategory $productCategory)
     {
-        return $user->id === $productCategory->user_id
+        return $user->id === $productCategory->user_id || $user->is_admin()
                 ? Response::allow()
                 : Response::deny('You are not allowed to do this action.');
     }
@@ -48,7 +48,7 @@ class ProductCategoryPolicy
      */
     public function forceDelete(User $user, ProductCategory $productCategory)
     {
-        return $user->id === $productCategory->user_id
+        return $user->id === $productCategory->user_id || $user->is_admin()
                 ? Response::allow()
                 : Response::deny('You are not allowed to do this action.');
     }

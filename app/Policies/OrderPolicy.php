@@ -20,7 +20,7 @@ class OrderPolicy
      */
     public function view(User $user, Order $order)
     {
-        return $user->id === $order->user_id || $user->id === $order->client_id
+        return $user->id === $order->user_id || $user->id === $order->client_id || $user->is_admin()
                 ? Response::allow()
                 : Response::deny('You are not allowed to view this.');
     }
@@ -34,7 +34,7 @@ class OrderPolicy
      */
     public function update(User $user, Order $order)
     {
-        return $user->id === $order->client_id
+        return $user->id === $order->client_id || $user->is_admin()
                 ? Response::allow()
                 : Response::deny('You are not allowed to do this action.');
     }

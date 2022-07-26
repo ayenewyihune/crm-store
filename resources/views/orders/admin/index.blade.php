@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboard_admin')
 
 @section('content')
     <h4>Orders</h4>
@@ -29,7 +29,8 @@
                         <td>{{ $order->town }}</td>
                         <td>{{ $order->products()->count() }}</td>
                         <td>{{ $order->order_status->name }}</td>
-                        <td><a href="{{ route('orders.show', $order->id) }}" class="btn btn-primary">View</a></td>
+                        <td><a href="{{ route('admin.orders.show', [$client->id, $order->id]) }}"
+                                class="btn btn-primary">View</a></td>
                     </tr>
                 @endforeach
             </tbody>

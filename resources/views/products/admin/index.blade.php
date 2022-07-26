@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboard_admin')
 
 @section('content')
     <div class="row">
@@ -6,7 +6,7 @@
             <h4>Products</h4>
         </div>
         <div class="col-6 text-right">
-            <a class="btn btn-primary" href="{{ route('products.create') }}">Create product</a>
+            <a class="btn btn-primary" href="{{ route('admin.products.create', $client->id) }}">Create product</a>
         </div>
     </div>
     <hr>
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                    <a href="{{ route('products.edit', $product->id) }}"
+                                    <a href="{{ route('admin.products.edit', [$client->id, $product->id]) }}"
                                         class="btn btn-outline-primary">Edit</a>
                                 </div>
                             </div>
@@ -99,7 +99,8 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+                                <form action="{{ route('admin.products.destroy', [$client->id, $product->id]) }}"
+                                    method="POST">
                                     @csrf
                                     @method('delete')
                                     <div class="modal-body">

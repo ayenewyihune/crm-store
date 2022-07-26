@@ -83,7 +83,7 @@
         </nav>
     </header>
 
-    <div class="bg-light min-vh-70 d-flex flex-row align-items-center">
+    <div style="min-height: calc(100vh - 117px);">
         <div class="container">
             @include('inc.messages')
             @yield('content')

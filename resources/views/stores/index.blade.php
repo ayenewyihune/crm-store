@@ -14,6 +14,7 @@
                     <th>Total product categories</th>
                     <th>Total products</th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -24,9 +25,10 @@
                         <td>{{ $store->user->name }}</td>
                         <td>{{ $store->user->product_categories->count() }}</td>
                         <td>{{ $store->user->products->count() }}</td>
+                        <td><a href="{{ route('admin.dashboard', $store->user->id) }}" class="btn btn-primary">View</a></td>
                         <td>
                             <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#modal-deactivate-{{ $store->id }}">DEACTIVATE</button>
+                                data-bs-target="#modal-deactivate-{{ $store->id }}">Deactivate</button>
                         </td>
                     </tr>
 
@@ -47,7 +49,8 @@
                                     <form action="{{ route('admin.stores.destroy', $store->id) }}" method="POST">
                                         @csrf
                                         @method('delete')
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary"
+                                            data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-danger btn-icon">Deactivate</button>
                                     </form>
                                 </div>
